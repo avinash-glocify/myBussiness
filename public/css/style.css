@@ -8812,7 +8812,12 @@ caption {
   text-align: left;
   caption-side: bottom;
 }
-
+.border-solid-theme {
+  border:1px solid #c6d2d9;
+}
+.border-btn {
+  border-bottom:none;
+}
 th {
   text-align: inherit;
 }

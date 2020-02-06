@@ -24,6 +24,12 @@
         <span class="menu-title">Dashboard</span>
       </a>
     </li>
+    <li class="nav-item">
+      <a class="nav-link" href="{{ route('add-google-account') }}">
+        <i class="mdi mdi-home menu-icon"></i>
+        <span class="menu-title">Add Google Account</span>
+      </a>
+    </li>
     <li class="nav-item" style="position:absolute; bottom:0px;">
       <a class="nav-link"  href="{{ route('logout') }}"
       onclick="event.preventDefault();

@@ -15,5 +15,9 @@ Auth::routes();
 
 Route::middleware('auth')->group(function() {
   Route::get('/', 'HomeController@index')->name('home');
+  Route::get('/add-account', 'GoogleController@index')->name('add-google-account');
   Route::get('/dashboard', 'HomeController@index')->name('home');
+  Route::post('/start/project', 'HomeController@startTracker')->name('start-tracker');
+  Route::get('/stop/project/{id}', 'HomeController@stopTracker')->name('stop-tracker');
+  Route::get('/check/tracker/session', 'HomeController@checkTrackerSession')->name('check-tracker-session');
 });
