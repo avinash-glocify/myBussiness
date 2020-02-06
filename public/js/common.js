@@ -44,9 +44,7 @@ function startStop() { /* Toggle StartStop */
 
   if (startstop === 1) {
     start();
-    document.getElementById("start").innerHTML = "Stop";
   } else if (startstop === 2) {
-    document.getElementById("start").innerHTML = "Start";
     startstop = 0;
     stop();
   }
@@ -90,6 +88,7 @@ function start() {
         if(errors.project_id) {
           $('#project_error').removeClass('d-none');
         }
+        // document.getElementById("start").innerHTML = "Start";
       }
     },
     error: function(data) {
@@ -109,6 +108,7 @@ function stop() {
         clearInterval(x);
         resetTime();
         window.location.reload();
+        document.getElementById("start").innerHTML = "Start";
       }
     },
     error: function(data) {

@@ -5,7 +5,7 @@
     <div class="col-12 grid-margin stretch-card">
       <div class="card">
         <div class="card-body">
-          <h4 class="card-title">Start Tracker</h4>
+          <p class="card-title">Start Tracker</p>
           <div class="d-none" id="task_error">
             <div class="d-flex justify-content-between align-items-end flex-wrap">
               <div class="alert alert-danger col-md-12 text-center">
@@ -21,25 +21,30 @@
             </div>
           </div>
           <form class="form-inline border-solid-theme pt-2">
-            <input type="text" class="form-control ml-2 mb-2 mr-sm-2 col-md-3" id="task" placeholder="Add What Are You Working on">
-            <div class="input-group mb-2 mr-sm-2 col-md-2">
+            @php $name = ''; $selectProjectId= 0; @endphp
+            @if(Session::has('tracker'))
+              @php $tracker = \App\Tracker::find(Session::get('tracker'));
+                $name          = $tracker->task;
+                $selectProjectId = $tracker->project_id;
+              @endphp
+            @endif
+            <input type="text" class="form-control ml-2 mb-2 mr-sm-2 col-md-3" id="task" placeholder="Add What Are You Working on" value="{{ $name }}">
+            <div class="input-group mb-2 mr-sm-2 @if(Session::has('this_session')) col-md-2 @else col-md-3 @endif">
               <select class="mdb-select form-control selectpicker  @error('emails') is-invalid @enderror" id="projectId"  data-live-search="true" name="prject">
                 <option value="">Select Project</option>
                 @foreach($projects as $key => $project)
-                <option value="{{$project->id}}">{{ $project->name }}</option>
+                <option value="{{$project->id}}" @if($selectProjectId === $project->id) Selected @endif>{{ $project->name }}</option>
                 @endforeach
               </select>
             </div>
-            <div class="input-group mb-2 mr-sm-2 col-md-3">
+            @if(Session::has('this_session'))
+            <div class="input-group mb-2 mr-sm-2 col-md-3 ">
               <div class="input-group-prepend"><div class="input-group-text text-success">
-                @if(Session::has('this_session'))
                   {{Session::get('this_session')}}
-                @else
-                  {{ \Carbon\Carbon::now()->format('H:i:A') }}
-                @endif
               </div></div>
               <div class="input-group-prepend"><div class="input-group-text text-success">{{ \Carbon\Carbon::now()->format('H:i:A') }}</div></div>
             </div>
+            @endif
             <div class="input-group mb-2 mr-sm-2 col-md-2">
               <span id="hour">00</span> :
               <span id="min">00</span> :
@@ -59,7 +64,7 @@
           <div class="card-body">
             @foreach($tracker as $key => $projectTracker)
             @if($key == 0)
-              <h4 class="card-header mb-2">
+              <p class="card-header mb-2">
                 @if(\Carbon\Carbon::parse($timeKey)->diffInDays() == 0)
                     Today
                   @elseif(\Carbon\Carbon::parse($timeKey)->diffInDays() == 1)
@@ -67,7 +72,7 @@
                   @else
                     {{ \Carbon\Carbon::createFromFormat('Y-m-d', $timeKey)->diffForHumans() }}
                 @endif
-              </h4>
+              </p>
             @endif
             <div class="form-inline pt-2 border-solid-theme @if(!$loop->last) border-btn @endif">
               <input type="text" class="form-control ml-2 mb-2 mr-sm-2 col-md-3" value="{{ $projectTracker->task }}" placeholder="Add What Are You Working on">
@@ -81,9 +86,9 @@
               </div>
               <div class="input-group mb-2 mr-sm-2 col-md-3">
                 <div class="input-group-prepend"><div class="input-group-text text-success">
-                  {{ \Carbon\Carbon::now()->format('H:i:A') }}
+                  {{ \Carbon\Carbon::parse($projectTracker->start_time)->format('h:i:A') }}
                 </div></div>
-                <div class="input-group-prepend"><div class="input-group-text text-success">{{ \Carbon\Carbon::now()->format('H:i:A') }}</div></div>
+                <div class="input-group-prepend"><div class="input-group-text text-success">{{ \Carbon\Carbon::parse($projectTracker->end_time)->format('h:i:A') }}</div></div>
                 @if($projectTracker->count > 1)
                   <div class="input-group-prepend p-3 ml-3 bg-info "><div class="text-success"></div> {{ $projectTracker->count }}</div>
                 @endif
